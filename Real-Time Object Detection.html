@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Real-Time Object Detection</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #0b1120;
+    color: white;
+}
+
+header {
+    background: #111c32;
+    padding: 20px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+header h2 {
+    color: #38bdf8;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+}
+
+nav a:hover {
+    color: #38bdf8;
+}
+
+.hero {
+    text-align: center;
+    padding: 65px 20px 35px;
+}
+
+.hero h1 {
+    font-size: 38px;
+    margin-bottom: 15px;
+}
+
+.hero h1 span {
+    color: #38bdf8;
+}
+
+.hero p {
+    color: #bdc9dc;
+    line-height: 1.7;
+    max-width: 650px;
+    margin: auto;
+}
+
+.container {
+    max-width: 1050px;
+    margin: 20px auto 60px;
+    padding: 20px;
+}
+
+.panel {
+    background: #142039;
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 22px;
+    border: 1px solid #293b59;
+}
+
+.panel h2 {
+    margin-bottom: 18px;
+    color: #38bdf8;
+}
+
+.controls {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 18px 0;
+}
+
+button, .upload-label {
+    border: none;
+    background: #0284c7;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+button:hover, .upload-label:hover {
+    background: #0369a1;
+}
+
+.secondary {
+    background: #334155;
+}
+
+#mediaArea {
+    min-height: 250px;
+    background: #080e1a;
+    border: 2px dashed #334155;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+}
+
+#mediaArea img, #mediaArea video {
+    display: block;
+    max-width: 100%;
+    max-height: 480px;
+}
+
+#placeholder {
+    text-align: center;
+    color: #94a3b8;
+    padding: 30px;
+}
+
+#status {
+    margin-top: 15px;
+    color: #7dd3fc;
+    line-height: 1.6;
+}
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 18px;
+}
+
+.feature {
+    background: #1e2c46;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.feature h3 {
+    margin-bottom: 10px;
+    color: #7dd3fc;
+}
+
+.feature p {
+    color: #cbd5e1;
+    line-height: 1.6;
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    background: #111c32;
+    color: #94a3b8;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+@media(max-width:600px) {
+    header {
+        flex-direction: column;
+    }
+    nav a {
+        margin: 0 7px;
+    }
+    .hero h1 {
+        font-size: 29px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h2>VisionAI</h2>
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#detector">Detector</a>
+        <a href="#features">Features</a>
+        <a href="#about">About</a>
+    </nav>
+</header>
+
+<section class="hero" id="home">
+    <h1>Real-Time <span>Object Detection</span></h1>
+    <p>
+        An intelligent computer vision interface designed to
+        help identify objects in images and live camera feeds.
+        Upload an image or start your camera to get started.
+    </p>
+</section>
+
+<main class="container">
+
+<section class="panel" id="detector">
+    <h2>Object Detection Workspace</h2>
+
+    <div class="controls">
+        <label class="upload-label" for="imageInput">
+            Upload Image
+        </label>
+        <input type="file" id="imageInput" accept="image/*">
+
+        <button onclick="startCamera()">Start Camera</button>
+        <button class="secondary" onclick="stopCamera()">Stop Camera</button>
+        <button class="secondary" onclick="resetWorkspace()">Reset</button>
+    </div>
+
+    <div id="mediaArea">
+        <div id="placeholder">
+            <h3>📷 Detection Preview</h3>
+            <p style="margin-top:10px">
+                Upload an image or start your camera.
+            </p>
+        </div>
+    </div>
+
+    <p id="status">Status: Ready to begin.</p>
+</section>
+
+<section class="panel" id="features">
+    <h2>Key Features</h2>
+    <div class="features">
+        <div class="feature">
+            <h3>📸 Image Upload</h3>
+            <p>Choose an image from your device for preview.</p>
+        </div>
+        <div class="feature">
+            <h3>🎥 Live Camera</h3>
+            <p>Access your camera with your permission.</p>
+        </div>
+        <div class="feature">
+            <h3>🧠 AI Integration</h3>
+            <p>Connect a trained object detection model for predictions.</p>
+        </div>
+        <div class="feature">
+            <h3>🗄️ Database</h3>
+            <p>Connect a backend to store detection results and history.</p>
+        </div>
+    </div>
+</section>
+
+<section class="panel" id="about">
+    <h2>About This Project</h2>
+    <p style="color:#cbd5e1; line-height:1.8">
+        Real-Time Object Detection uses computer vision and
+        artificial intelligence to recognize objects in visual
+        data. This website provides a user interface for the
+        project. Actual AI predictions and MySQL storage require
+        connection to a backend and a trained detection model.
+    </p>
+</section>
+
+</main>
+
+<footer>
+    Real-Time Object Detection Project | 2026–2027
+</footer>
+
+<script>
+const imageInput = document.getElementById("imageInput");
+const mediaArea = document.getElementById("mediaArea");
+const statusText = document.getElementById("status");
+
+let cameraStream = null;
+let currentImageURL = null;
+
+function showPlaceholder() {
+    mediaArea.innerHTML = `
+        <div id="placeholder">
+            <h3>📷 Detection Preview</h3>
+            <p style="margin-top:10px">
+                Upload an image or start your camera.
+            </p>
+        </div>`;
+}
+
+imageInput.addEventListener("change", function() {
+    stopCamera(false);
+
+    const file = this.files[0];
+    if (!file) return;
+
+    if (currentImageURL) {
+        URL.revokeObjectURL(currentImageURL);
+    }
+
+    currentImageURL = URL.createObjectURL(file);
+
+    mediaArea.innerHTML = "";
+    const img = document.createElement("img");
+    img.src = currentImageURL;
+    img.alt = "Uploaded image preview";
+    mediaArea.appendChild(img);
+
+    statusText.textContent =
+        "Image loaded: " + file.name +
+        ". AI detection requires a connected model.";
+});
+
+async function startCamera() {
+    try {
+        stopCamera(false);
+
+        cameraStream = await navigator.mediaDevices.getUserMedia({
+            video: true,
+            audio: false
+        });
+
+        mediaArea.innerHTML = "";
+        const video = document.createElement("video");
+        video.id = "camera";
+        video.autoplay = true;
+        video.playsInline = true;
+        video.muted = true;
+        video.srcObject = cameraStream;
+        mediaArea.appendChild(video);
+
+        statusText.textContent =
+            "Camera active. Connect an AI model for live predictions.";
+    } catch (error) {
+        statusText.textContent =
+            "Camera unavailable. Allow camera permission and use localhost or HTTPS.";
+    }
+}
+
+function stopCamera(updateStatus = true) {
+    if (cameraStream) {
+        cameraStream.getTracks().forEach(track => track.stop());
+        cameraStream = null;
+    }
+
+    if (updateStatus) {
+        showPlaceholder();
+        statusText.textContent = "Camera stopped.";
+    }
+}
+
+function resetWorkspace() {
+    stopCamera(false);
+
+    if (currentImageURL) {
+        URL.revokeObjectURL(currentImageURL);
+        currentImageURL = null;
+    }
+
+    imageInput.value = "";
+    showPlaceholder();
+    statusText.textContent = "Status: Ready to begin.";
+}
+</script>
+
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+</body>
+</html>
